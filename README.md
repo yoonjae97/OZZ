@@ -72,7 +72,7 @@
 **[ FRONT-END ]**
 
 - **HTML/CSS**
-- **JavaScript***
+- **JavaScript**
 - Figma
 
 **[ BACK-END ]**
