@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ozz.dao.MissionDAO">
+	<insert id="MissionwriteOk">
+		insert into t_mission(mission_no, userid, mission_title, mission_tag, mission_content, created_at, mission_data, mission_tool, mission_cate, hit, mission_skill)
+		values(mission_no_seq.nextval, #{userid}, #{mission_title}, #{mission_tag}, #{mission_content}, sysdate, #{mission_data}, #{mission_tool}, #{mission_cate}, 0, #{mission_skill})
+	</insert>
+	
+	<select id="Missionlist" resultType="kr.or.ozz.dto.MissionDTO">
+         SELECT * FROM
+            (SELECT mission_no, mission_title, mission_tag, userid, to_char(created_at, 'YYYY-MM-DD') created_at, hit FROM t_mission
+            <!-- 검색어가 있을 때 -->
+            <if test="searchWord != null">
+            	where mission_title like '%${searchWord}%'
+            </if>
+            ORDER BY created_at DESC)
+         WHERE <![CDATA[rownum <= 5]]>
+	</select>
+	
+	<select id="m_totalRecord" resultType="int">
+		select count(mission_no) cnt from t_mission
+		<if test="searchWord != null">
+			where mission_title like '%${searchWord}%'
+		</if>
+	</select>
+	
+	<select id="getMission" resultType="kr.or.ozz.dto.MissionDTO">
+		select mission_no, userid, mission_title, mission_tag, mission_content, created_at, mission_data, mission_tool, mission_cate, hit, mission_skill
+		from t_mission
+		where mission_no = ${param1}
+	</select>
+	<update id="hitCount">
+		update t_mission set hit=hit+1 where mission_no=${param1}
+	</update>
+	<update id="MissionEdit">
+		update t_mission set mission_title=#{mission_title}, mission_content=#{mission_content}, mission_tag=#{mission_tag},
+		mission_data=#{mission_data}, mission_tool=#{mission_tool}, mission_cate=#{mission_cate}, created_at=sysdate, mission_skill=#{mission_skill}
+		where mission_no=${mission_no} and userid=#{userid}
+	</update>
+	<delete id="MissionDel">
+		delete from t_mission where mission_no=${param1} and userid=#{param2}
+	</delete>
+	
+	<select id="MissionToplist" resultType="kr.or.ozz.dto.MissionDTO">
+   		<![CDATA[
+	      SELECT mission_no, mission_title, mission_tag, userid     
+	      FROM (SELECT t.* FROM t_mission t ORDER BY t.hit DESC)
+	      WHERE ROWNUM <= 10
+   		]]>
+	</select>
+	
+	<insert id="missionCreate" parameterType="kr.or.ozz.dto.MissionDTO">
+      insert into t_mission(mission_no, userid, mission_title,
+      mission_tag, mission_content, created_at, mission_data,
+      mission_tool, mission_cate, hit, mission_skill)
+      values(
+      mission_no_seq.nextval, #{userid}, #{mission_title},
+      #{mission_tag}, #{mission_content},
+      sysdate, #{mission_data},
+      #{mission_tool}, #{mission_cate}, 0,
+      #{mission_skill})
+   </insert>
+   
+     <select id="getmission_no" resultType="int">
+        SELECT mission_no FROM (
+  		SELECT mission_no
+  		FROM t_mission
+  		ORDER BY mission_no DESC
+		)
+		WHERE ROWNUM = 1
+    </select>
+	
+	
+	<insert id="stepCreate" parameterType="kr.or.ozz.dto.StepDTO">
+      insert into
+      t_mission_step(step_no, mission_no, step,
+      step_title)
+      values(step_no_seq.nextval, #{mission_no}, #{step},
+      #{step_title})
+   </insert>
+   
+   <select id="getstep_no" resultType="int">
+       SELECT step_no FROM (
+		  SELECT step_no
+		  FROM t_mission_step
+		  ORDER BY step_no DESC
+		)
+		WHERE ROWNUM = 1
+   </select>
+   
+   
+   <insert id="taskCreate" parameterType="kr.or.ozz.dto.TaskDTO">
+      insert into
+      t_mission_task(task_no, step_no, task_title,
+      task_content, task, file_name)
+      values(task_no_seq.nextval, #{step_no}, #{task_title},
+      #{task_content}, #{task}, #{file_name})
+   </insert>
+   
+   <select id="getmymission" resultType="kr.or.ozz.dto.MissionDTO">
+	   SELECT mission_no, mission_title
+			FROM (
+			    SELECT mission_no, mission_title, ROWNUM AS rnum
+			    FROM t_mission
+			    WHERE userid = #{param1}
+			)
+		<![CDATA[WHERE rnum <= 5]]>
+   </select>
+</mapper>

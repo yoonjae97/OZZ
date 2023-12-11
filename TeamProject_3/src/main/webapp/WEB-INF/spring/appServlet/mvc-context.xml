@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/Qna/Qnawrite"/>
+			<mvc:mapping path="/Qna/QnawriteOk"/>
+			<mvc:mapping path="/Qna/QnaEdit"/>
+			<mvc:mapping path="/Qna/QnaEditOk"/>
+			<mvc:mapping path="/Qna/QnaDel"/>
+			
+			<mvc:mapping path="/Mission/Missionwrite"/>
+			<mvc:mapping path="/Mission/MissionwriteOk"/>
+			<mvc:mapping path="/Mission/MissionEdit"/>
+			<mvc:mapping path="/Mission/MissionEditOk"/>
+			<mvc:mapping path="/Mission/MissionDel"/>
+			
+			<mvc:mapping path="/Step/Stepwrite"/>
+			<mvc:mapping path="/Step/StepwriteOk"/>
+			<mvc:mapping path="/Step/StepEdit"/>
+			<mvc:mapping path="/Step/StepEditOk"/>
+			<mvc:mapping path="/Step/StepDel"/>
+			
+			<mvc:mapping path="/Board/Boardwrite"/>
+			<mvc:mapping path="/Board/BoardwriteOk"/>
+			<mvc:mapping path="/Board/BoardEdit"/>
+			<mvc:mapping path="/Board/BoardEditOk"/>
+			<mvc:mapping path="/Board/BoardDel"/>
+			
+			<mvc:mapping path="/Review/Reviewwrite"/>
+			<mvc:mapping path="/Review/ReviewwriteOk"/>
+			<mvc:mapping path="/Review/ReviewEdit"/>
+			<mvc:mapping path="/Review/ReviewEditOk"/>
+			<mvc:mapping path="/Review/ReviewDel"/>
+			<bean class="kr.or.ozz.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>	
+	
+	<!-- 파일 업로드 객체 만들기 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+</beans>
